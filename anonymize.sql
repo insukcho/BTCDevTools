@@ -9,9 +9,9 @@ CREATE FUNCTION alter_temperature(timestamp, real) RETURNS real
 	AS $$ SELECT CAST(
 		$2 +
 		sin(pi() * to_minutes_since_inception($1) / 15) +
-		5 * sin(pi() * to_minutes_since_inception($1) / 120) +
-		15 * sin(pi() * to_minutes_since_inception($1) / 300) +
-		5 * sin(pi() * to_minutes_since_inception($1) / 1000)
+		3 * sin(pi() * to_minutes_since_inception($1) / 120) +
+		3 * sin(pi() * to_minutes_since_inception($1) / 300) +
+		4 * sin(pi() * to_minutes_since_inception($1) / 1000)
 	AS real) $$
 	LANGUAGE SQL;
 
@@ -21,4 +21,11 @@ CREATE TABLE t_config_alt (i_div, i_type, i_att1)
 	AS SELECT i_div, i_type, (i_att1::float + 10)::character varying(100) FROM t_config;
 
 CREATE TABLE t_gas_temp_alt (d_timestamp, n_mw, n_frh_inlet, n_fsh_inlet, n_ltrh_inlet, n_eco2_inlet)
-	AS SELECT d_timestamp, n_mw + 1, alter_temperature(d_timestamp, n_frh_inlet), n_fsh_inlet, n_ltrh_inlet, n_eco2_inlet FROM t_gas_temp;
+	AS SELECT
+		d_timestamp,
+		n_mw + 1,
+		alter_temperature(d_timestamp, n_frh_inlet),
+		alter_temperature(d_timestamp, n_fsh_inlet),
+		alter_temperature(d_timestamp, n_ltrh_inlet),
+		alter_temperature(d_timestamp, n_eco2_inlet)
+	FROM t_gas_temp;
