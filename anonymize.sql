@@ -18,7 +18,9 @@ CREATE FUNCTION alter_temperature(timestamp, real) RETURNS real
 DROP TABLE IF EXISTS t_config_alt, t_gas_temp_alt, t_frh_calc_alt, t_fsh_calc_alt;
 
 CREATE TABLE t_config_alt (i_div, i_type, i_att1)
-	AS SELECT i_div, i_type, (i_att1::float + 10)::character varying(100) FROM t_config;
+	AS SELECT i_div, i_type, (i_att1::float + 10)::character varying(100)
+	FROM t_config
+	WHERE i_type = 'Limit Line';
 
 CREATE TABLE t_gas_temp_alt (d_timestamp, n_mw, n_frh_inlet, n_fsh_inlet, n_ltrh_inlet, n_eco2_inlet)
 	AS SELECT
