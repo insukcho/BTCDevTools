@@ -15,14 +15,14 @@ CREATE FUNCTION alter_temperature(timestamp, real) RETURNS real
 	AS real) $$
 	LANGUAGE SQL;
 
-DROP TABLE IF EXISTS t_config_alt, t_gas_temp_alt;
+DROP TABLE IF EXISTS t_config_alt, t_gas_temp_alt, t_frh_calc_alt, t_fsh_calc_alt;
 
 CREATE TABLE t_config_alt (i_div, i_type, i_att1)
 	AS SELECT i_div, i_type, (i_att1::float + 10)::character varying(100) FROM t_config;
 
 CREATE TABLE t_gas_temp_alt (d_timestamp, n_mw, n_frh_inlet, n_fsh_inlet, n_ltrh_inlet, n_eco2_inlet)
 	AS SELECT
-		d_timestamp,
+		d_timestamp + '2 years'::interval,
 		n_mw + 1,
 		alter_temperature(d_timestamp, n_frh_inlet),
 		alter_temperature(d_timestamp, n_fsh_inlet),
@@ -33,7 +33,7 @@ CREATE TABLE t_gas_temp_alt (d_timestamp, n_mw, n_frh_inlet, n_fsh_inlet, n_ltrh
 CREATE TABLE t_frh_calc_alt (i_div, d_timestamp, i_tube_no, n_mw, n_att1, n_att2, n_att3, n_att4, n_att5, n_att6, n_att7, n_att8, n_att9, n_att10, n_att11, n_att12, n_att13, n_att14, n_att15, n_att16, n_att17, n_att18, n_att19, n_att20, n_att21, n_att22, n_att23)
 	AS SELECT
 		i_div,
-		d_timestamp,
+		d_timestamp + '2 years'::interval,
 		i_tube_no,
 		n_mw + 1,
 		alter_temperature(d_timestamp, n_att1),
@@ -64,7 +64,7 @@ CREATE TABLE t_frh_calc_alt (i_div, d_timestamp, i_tube_no, n_mw, n_att1, n_att2
 CREATE TABLE t_fsh_calc_alt (i_div, d_timestamp, i_tube_no, n_mw, n_att1, n_att2, n_att3, n_att4, n_att5, n_att6, n_att7, n_att8, n_att9, n_att10, n_att11, n_att12, n_att13, n_att14, n_att15, n_att16, n_att17, n_att18, n_att19, n_att20, n_att21, n_att22, n_att23, n_att24, n_att25, n_att26, n_att27, n_att28, n_att29, n_att30, n_att31, n_att32, n_att33, n_att34, n_att35, n_att36, n_att37, n_att38, n_att39, n_att40, n_att41, n_att42, n_att43, n_att44, n_att45, n_att46, n_att47)
 	AS SELECT
 		i_div,
-		d_timestamp,
+		d_timestamp + '2 years'::interval,
 		i_tube_no,
 		n_mw + 1,
 		alter_temperature(d_timestamp, n_att1),
