@@ -6,7 +6,13 @@ CREATE FUNCTION to_minutes_since_inception(timestamp) RETURNS real
 	LANGUAGE SQL;
 
 CREATE FUNCTION alter_temperature(timestamp, real) RETURNS real
-	AS $$ SELECT CAST($2 + sin(pi() * to_minutes_since_inception($1) / 15) AS real) $$
+	AS $$ SELECT CAST(
+		$2 +
+		sin(pi() * to_minutes_since_inception($1) / 15) +
+		5 * sin(pi() * to_minutes_since_inception($1) / 120) +
+		15 * sin(pi() * to_minutes_since_inception($1) / 300) +
+		5 * sin(pi() * to_minutes_since_inception($1) / 1000)
+	AS real) $$
 	LANGUAGE SQL;
 
 DROP TABLE IF EXISTS t_config_alt, t_gas_temp_alt;
